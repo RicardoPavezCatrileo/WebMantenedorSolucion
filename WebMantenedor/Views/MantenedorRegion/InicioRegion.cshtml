@@ -1,0 +1,46 @@
+﻿@model IEnumerable<WebMantenedor.Models.Region>
+
+@{
+    ViewBag.Title = "InicioRegion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>InicioRegion</h2>
+
+<p>
+    @Html.ActionLink("Crear Nueva Region", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.REG_id_reg)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.REG_nom_reg)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.REG_det_reg)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.REG_id_reg)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.REG_nom_reg)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.REG_det_reg)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

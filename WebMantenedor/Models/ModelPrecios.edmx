@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ShippingPriceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Peso">
+          <Key>
+            <PropertyRef Name="PES_id_pes" />
+          </Key>
+          <Property Name="PES_id_pes" Type="int" Nullable="false" />
+          <Property Name="PES_nom_pes" Type="nvarchar" MaxLength="50" />
+          <Property Name="PES_min_pes" Type="real" />
+          <Property Name="PES_max_pes" Type="real" />
+        </EntityType>
+        <EntityType Name="Precios">
+          <Key>
+            <PropertyRef Name="PRE_id_pre" />
+          </Key>
+          <Property Name="PRE_id_pre" Type="int" Nullable="false" />
+          <Property Name="PRE_id_reg" Type="int" />
+          <Property Name="PRE_id_pes" Type="int" />
+          <Property Name="PRE_pre_pre" Type="numeric" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="REG_id_reg" />
+          </Key>
+          <Property Name="REG_id_reg" Type="int" Nullable="false" />
+          <Property Name="REG_nom_reg" Type="nvarchar" MaxLength="50" />
+          <Property Name="REG_det_reg" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <Association Name="FK_Precios_Peso">
+          <End Role="Peso" Type="Self.Peso" Multiplicity="0..1" />
+          <End Role="Precios" Type="Self.Precios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peso">
+              <PropertyRef Name="PES_id_pes" />
+            </Principal>
+            <Dependent Role="Precios">
+              <PropertyRef Name="PRE_id_pes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Precios_Region">
+          <End Role="Region" Type="Self.Region" Multiplicity="0..1" />
+          <End Role="Precios" Type="Self.Precios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="REG_id_reg" />
+            </Principal>
+            <Dependent Role="Precios">
+              <PropertyRef Name="PRE_id_reg" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShippingPriceModelStoreContainer">
+          <EntitySet Name="Peso" EntityType="Self.Peso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Precios" EntityType="Self.Precios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Precios_Peso" Association="Self.FK_Precios_Peso">
+            <End Role="Peso" EntitySet="Peso" />
+            <End Role="Precios" EntitySet="Precios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Precios_Region" Association="Self.FK_Precios_Region">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="Precios" EntitySet="Precios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShippingPriceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Peso">
+          <Key>
+            <PropertyRef Name="PES_id_pes" />
+          </Key>
+          <Property Name="PES_id_pes" Type="Int32" Nullable="false" />
+          <Property Name="PES_nom_pes" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PES_min_pes" Type="Single" />
+          <Property Name="PES_max_pes" Type="Single" />
+          <NavigationProperty Name="Precios" Relationship="Self.FK_Precios_Peso" FromRole="Peso" ToRole="Precios" />
+        </EntityType>
+        <EntityType Name="Precios">
+          <Key>
+            <PropertyRef Name="PRE_id_pre" />
+          </Key>
+          <Property Name="PRE_id_pre" Type="Int32" Nullable="false" />
+          <Property Name="PRE_id_reg" Type="Int32" />
+          <Property Name="PRE_id_pes" Type="Int32" />
+          <Property Name="PRE_pre_pre" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="Peso" Relationship="Self.FK_Precios_Peso" FromRole="Precios" ToRole="Peso" />
+          <NavigationProperty Name="Region" Relationship="Self.FK_Precios_Region" FromRole="Precios" ToRole="Region" />
+        </EntityType>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="REG_id_reg" />
+          </Key>
+          <Property Name="REG_id_reg" Type="Int32" Nullable="false" />
+          <Property Name="REG_nom_reg" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="REG_det_reg" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Precios" Relationship="Self.FK_Precios_Region" FromRole="Region" ToRole="Precios" />
+        </EntityType>
+        <Association Name="FK_Precios_Peso">
+          <End Role="Peso" Type="Self.Peso" Multiplicity="0..1" />
+          <End Role="Precios" Type="Self.Precios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peso">
+              <PropertyRef Name="PES_id_pes" />
+            </Principal>
+            <Dependent Role="Precios">
+              <PropertyRef Name="PRE_id_pes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Precios_Region">
+          <End Role="Region" Type="Self.Region" Multiplicity="0..1" />
+          <End Role="Precios" Type="Self.Precios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="REG_id_reg" />
+            </Principal>
+            <Dependent Role="Precios">
+              <PropertyRef Name="PRE_id_reg" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShippingPriceEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Peso" EntityType="Self.Peso" />
+          <EntitySet Name="Precios" EntityType="Self.Precios" />
+          <EntitySet Name="Region" EntityType="Self.Region" />
+          <AssociationSet Name="FK_Precios_Peso" Association="Self.FK_Precios_Peso">
+            <End Role="Peso" EntitySet="Peso" />
+            <End Role="Precios" EntitySet="Precios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Precios_Region" Association="Self.FK_Precios_Region">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="Precios" EntitySet="Precios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ShippingPriceModelStoreContainer" CdmEntityContainer="ShippingPriceEntities">
+          <EntitySetMapping Name="Peso">
+            <EntityTypeMapping TypeName="ShippingPriceModel.Peso">
+              <MappingFragment StoreEntitySet="Peso">
+                <ScalarProperty Name="PES_id_pes" ColumnName="PES_id_pes" />
+                <ScalarProperty Name="PES_nom_pes" ColumnName="PES_nom_pes" />
+                <ScalarProperty Name="PES_min_pes" ColumnName="PES_min_pes" />
+                <ScalarProperty Name="PES_max_pes" ColumnName="PES_max_pes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Precios">
+            <EntityTypeMapping TypeName="ShippingPriceModel.Precios">
+              <MappingFragment StoreEntitySet="Precios">
+                <ScalarProperty Name="PRE_id_pre" ColumnName="PRE_id_pre" />
+                <ScalarProperty Name="PRE_id_reg" ColumnName="PRE_id_reg" />
+                <ScalarProperty Name="PRE_id_pes" ColumnName="PRE_id_pes" />
+                <ScalarProperty Name="PRE_pre_pre" ColumnName="PRE_pre_pre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Region">
+            <EntityTypeMapping TypeName="ShippingPriceModel.Region">
+              <MappingFragment StoreEntitySet="Region">
+                <ScalarProperty Name="REG_id_reg" ColumnName="REG_id_reg" />
+                <ScalarProperty Name="REG_nom_reg" ColumnName="REG_nom_reg" />
+                <ScalarProperty Name="REG_det_reg" ColumnName="REG_det_reg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
